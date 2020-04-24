@@ -3,7 +3,7 @@
 
 ###############################################################################################################
 
-setwd("C:\\Users\\risel\\Dropbox\\Sommer postdoc\\Ramona mockingbirds\\Mockingbirds analysis\\FINAL ANALYSIS")
+
 
 
 # load packages
@@ -36,7 +36,7 @@ library(coda)
 ####################################FULL MICROBIOME ###########################################
 
 
-mockingbird_microbiome<-readRDS("C:\\Users\\risel\\Dropbox\\Sommer postdoc\\PHYLOSEQ OBJECTS\\mockingbird_unrarefied.rds") 
+mockingbird_microbiome<-readRDS("mockingbird_unrarefied.rds") 
 
 
 #################################################### Generate rarefraction curves ##########################################################
@@ -348,78 +348,6 @@ mb_full_results
 mb_meandist
 
 
-############################## weighted unifrac plot (Supplementary material
-
-set.seed(1)
-
-mockingbirds_mb_wuni_mds <- ordinate(
-  physeq = mockingbirds_rare1, 
-  method = "MDS", 
-  distance = "wunifrac")
-
-
-
-#extract axis info from pcoa
-
-mockingbirds_mb_wuni_mds_vectors<-mockingbirds_mb_wuni_mds$vectors
-mockingbirds_mb_wuni_mds_vectors<-as.data.frame(mockingbirds_mb_wuni_mds_vectors)
-
-# extract only axis 1+2 into new df
-
-mb_df_axis<-mockingbirds_mb_wuni_mds_vectors[,1:2]
-mb_df_axis
-
-# add species and island info
-# check if Ids metadata file and axis df are ordered the same!
-
-mb_metadata
-
-mb_metadata$feature.id
-mb_metadata$Island
-mb_metadata$Species
-
-mb_df_axis$Island<-mb_metadata$Island
-mb_df_axis$Species<-mb_metadata$Species
-
-plot_ordination(mockingbirds_rare1, mockingbirds_mb_wuni_mds, type="Samples", color="Species", title="taxa")
-
-
-# plot and make ellipse around species
-
-mb_df_axis_full_weighted<-mb_df_axis
-
-mbuni_mds_weighted<-ggplot(mb_df_axis_full_weighted)+
-  geom_point(aes(x=Axis.1,y=Axis.2, color=Species, shape=Island), size = 3) + 
-  stat_ellipse(aes(x=Axis.1,y=Axis.2,color=Species),type = "norm", size = 1) +
-  theme_bw() + 
-  scale_color_manual(values=c("royalblue3","orange","darkolivegreen3","darkorchid3")) + 
-  scale_shape_manual(values=c(16,15,17,18,8,16,15,16,17)) +  
-  theme(panel.background = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), plot.background = element_blank()) +
-  ggtitle("Weighted Unifrac: Full microbiome") + 
-  labs(x = "Axis 1 [34.1 %]", y ="Axis 2 [13.5 %]")+
- # theme(legend.position = "none")+
-  theme(axis.text = element_text( size=12), axis.title = element_text( size=14))+
-  theme(plot.title = element_text(size=18))
-
-
-mbuni_mds_weighted
-
-mb_wunifrac <- phyloseq::distance(mockingbirds_rare1, method = "wunifrac")
-mb_wunifrac
-
-# make a data frame from the sample_data
-sampledf <- data.frame(sample_data(mockingbirds_rare1))
-#sampledf
-
-#Test
-adonis_mb_weighted<-adonis2(mb_wunifrac ~ Species+Island, data = sampledf) #doesnt make a difference if use strata or not
-
-adonis_mb_weighted
-perm_mb_weighted<-permustats(adonis_mb_weighted)
-summary(perm_mb_weighted) #ADONIS RESULTS WEIGHTED
-
-
-
 
 ######################################### REPEAT FOR (SPECIES) CORE MICROBIOME ######################
 ######################################### REPEAT FOR (SPECIES) CORE MICROBIOME ######################
@@ -430,10 +358,7 @@ summary(perm_mb_weighted) #ADONIS RESULTS WEIGHTED
 
 ### core Microbiome UniFrac MDS 
 
-
-mockingbird_core<-readRDS("mockingbird_island_core.rds")
 mockingbird_core<-readRDS("mockingbird_island_core_css.rds")
-
 
 
 names(sample_data(mockingbird_core))[8]<-'Species'
@@ -571,7 +496,7 @@ mb_core_meandist
 
 ### MHC UniFrac MDS
 
-mhc_phylo<-readRDS("C:\\Users\\risel\\Dropbox\\Sommer postdoc\\Ramona mockingbirds\\Mockingbirds analysis\\FINAL ANALYSIS\\mhc_phyloseq.rds")
+mhc_phylo<-readRDS("mhc_phyloseq.rds")
 
 mhc_phylo
 
@@ -719,7 +644,7 @@ mhc_meandist
 
 #install.packages("adegenet")
 
-MicrosatTable<-read.csv("C:\\Users\\risel\\Dropbox\\Sommer postdoc\\Ramona mockingbirds\\Mockingbirds analysis\\FINAL ANALYSIS\\microsat_individual_alleles.csv", sep = ',', header = TRUE)
+MicrosatTable<-read.csv("microsat_individual_alleles.csv", sep = ',', header = TRUE)
 
 microsat<-as.data.frame(MicrosatTable)
 
@@ -1352,7 +1277,7 @@ vegan::mantel(as.dist(microsat_meandist1),as.dist(geographic_distance1), permuta
 
 #import matrix coding whether comparison is within or between species
 
-ComparisonType <- read.csv("C:/Users/risel/Dropbox/Sommer postdoc/Ramona mockingbirds/Mockingbirds analysis/FINAL ANALYSIS/ComparisonType_matrix.csv", row.names=1)
+ComparisonType <- read.csv("ComparisonType_matrix.csv", row.names=1)
 
 #########CORE MICROBIOME
 #########CORE MICROBIOME
@@ -1945,11 +1870,7 @@ grid.arrange(mbuni_mds, mbuni_mds_core, mhcuni_mds, micromds)
 ############################################################ BEDASSLE ANALYSIS #######################################
 
 
-
-setwd("C:\\Users\\risel\\Dropbox\\Sommer postdoc\\Ramona mockingbirds\\Mockingbirds analysis\\FINAL ANALYSIS")
-
-
-microbiome<-readRDS("C:\\Users\\risel\\Dropbox\\Sommer postdoc\\PHYLOSEQ OBJECTS\\mockingbird_unrarefied.rds")
+microbiome<-readRDS("mockingbird_unrarefied.rds")
 
 microbiome<- rarefy_even_depth(microbiome, sample.size = 10000,rngsee = 100, replace = TRUE, trimOTUs=TRUE,verbose=TRUE)
 
@@ -2008,7 +1929,7 @@ str(sample_size_matrix)
 
 ####################### island core microbiome
 
-mockingbird_core<-readRDS("C:\\Users\\risel\\Dropbox\\Sommer postdoc\\Ramona mockingbirds\\Mockingbirds analysis\\FINAL ANALYSIS\\mockingbird_island_core_css.rds")
+mockingbird_core<-readRDS("mockingbird_island_core_css.rds")
 
 mockingbird_core
 
