@@ -1,6 +1,7 @@
 # Mockingbird-Microbiome-Phylosymbiosis-Project
-Tests the contribution of MHC and microsatellite genotype on microbiome composition of Galapagos mockingbirds
+Data and code for our paper:
 
+Mechanisms governing avian phylosymbiosis: Genetic dissimilarity based on neutral and MHC regions exhibits little relationship with gut microbiome distributions of Galápagos mockingbirds. ECOLOGY AND EVOLUTION 2020.
 
 This is the data and R code for our manuscript "Mechanisms governing avian phylosymbiosis: genetic dissimilarity 
 based on neutral and MHC regions exhibits little relationship with gut microbiome distributions of Galápagos mockingbirds"
